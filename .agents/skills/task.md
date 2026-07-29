@@ -1,0 +1,12 @@
+- [x] Create Movie and Cinema models with mock data matching assets
+- [x] Implement booking history methods in `PreferenceService`
+- [x] Create reusable `LogoHeader` widget
+- [x] Update Splash, Login, and Register screens to use the black & neon green theme with the logo
+- [x] Rebuild `HomePage` with hot slider and now showing / coming soon lists
+- [x] Create `MovieDetailPage` showing movie info and booking trigger
+- [x] Create `CinemaPage` with list of malls and schedule selection
+- [x] Create CGV-style `BookingPage` with seat selection grid and booking success
+- [x] Update `HistoryPage` to display both login and booking history
+- [x] Create `ProfileSettingPage` merging profile details and settings toggles
+- [x] Update `MainPage` to integrate all 4 pages and check layout styling
+- [x] Run `flutter analyze` to ensure successful compilation

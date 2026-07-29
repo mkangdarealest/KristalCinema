@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "65389130845",
+    "project_id": "kristalcinema",
+    "storage_bucket": "kristalcinema.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65389130845:android:4815f0fd8fde8216dbc9b4",
+        "android_client_info": {
+          "package_name": "com.example.flutter_buoi_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAigp7l8RE4HDYSm5PGJC4wReFJNcF1NU0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
