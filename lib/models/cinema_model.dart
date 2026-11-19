@@ -13,28 +13,41 @@ class Cinema {
     required this.showtimes,
   });
 
-  /// Chuyển từ Firestore Document sang Cinema object
-  factory Cinema.fromFirestore(Map<String, dynamic> json, String docId) {
+  /// Chuyển từ JSON API sang Cinema object
+  factory Cinema.fromJson(Map<String, dynamic> json) {
+    List<String> times = ["09:30", "12:40", "15:15", "18:00", "20:30", "22:45"];
+    if (json["showtimes"] is List) {
+      times = (json["showtimes"] as List).map((e) => e.toString()).toList();
+    }
     return Cinema(
-      id: docId,
-      name: json["name"] ?? "",
-      address: json["address"] ?? "",
-      image: json["image"] ?? json["imageUrl"] ?? "",
-      showtimes: json["showtimes"] is List 
-          ? List<String>.from(json["showtimes"]) 
-          : ["09:00", "12:00", "15:00", "18:00", "21:00"],
+      id: (json["id"] ?? json["cinemaId"] ?? json["CINEMA_ID"] ?? "").toString(),
+      name: json["name"] ?? json["NAME"] ?? "",
+      address: json["address"] ?? json["ADDRESS"] ?? "",
+      image: json["image"] ?? json["IMAGE"] ?? json["imageUrl"] ?? "",
+      showtimes: times,
     );
   }
 
-  /// Chuyển Cinema sang Map để lưu trên Firestore
-  Map<String, dynamic> toFirestore() {
+  /// Tương thích fromFirestore cũ
+  factory Cinema.fromFirestore(Map<String, dynamic> json, String docId) {
+    final m = Map<String, dynamic>.from(json);
+    m["id"] = docId;
+    return Cinema.fromJson(m);
+  }
+
+  /// Chuyển Cinema sang Map để gửi qua REST API
+  Map<String, dynamic> toJson() {
     return {
+      "id": id,
       "name": name,
       "address": address,
       "image": image,
       "showtimes": showtimes,
     };
   }
+
+  /// Tương thích toFirestore cũ
+  Map<String, dynamic> toFirestore() => toJson();
 
   static final List<Cinema> mockCinemas = [
     Cinema(

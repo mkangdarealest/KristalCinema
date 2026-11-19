@@ -1,4 +1,5 @@
 class UserModel {
+  final String? id;
   final String fullName;
   final String email;
   final String phone;
@@ -9,6 +10,7 @@ class UserModel {
   final String role;
 
   UserModel({
+    this.id,
     required this.fullName,
     required this.email,
     required this.phone,
@@ -19,9 +21,10 @@ class UserModel {
     this.role = "user",
   });
 
-  /// Chuyển Object -> Map (bao gồm password cho lưu cục bộ nếu cần)
+  /// Chuyển Object -> Map
   Map<String, dynamic> toJson() {
     return {
+      if (id != null) "userId": id,
       "fullName": fullName,
       "email": email,
       "phone": phone,
@@ -33,29 +36,20 @@ class UserModel {
     };
   }
 
-  /// Chuyển Object -> Map để lưu lên Firestore (Không lưu password)
-  Map<String, dynamic> toFirestore() {
-    return {
-      "fullName": fullName,
-      "email": email,
-      "phone": phone,
-      "avatar": avatar,
-      "gender": gender,
-      "city": city,
-      "role": role,
-    };
-  }
+  /// Tương thích toFirestore cũ
+  Map<String, dynamic> toFirestore() => toJson();
 
-  /// Chuyển Map -> Object
+  /// Chuyển Map / JSON -> Object
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
+      id: json["userId"] ?? json["id"] ?? "",
       fullName: json["fullName"] ?? "",
       email: json["email"] ?? "",
       phone: json["phone"] ?? "",
       password: json["password"] ?? "",
       avatar: json["avatar"] ?? "",
-      gender: json["gender"] ?? "",
-      city: json["city"] ?? "",
+      gender: json["gender"] ?? "Khác",
+      city: json["city"] ?? "TP. Hồ Chí Minh",
       role: json["role"] ?? "user",
     );
   }
@@ -64,10 +58,10 @@ class UserModel {
   String toString() {
     return '''
 UserModel(
+  id: $id,
   fullName: $fullName,
   email: $email,
   phone: $phone,
-  password: $password,
   avatar: $avatar,
   gender: $gender,
   city: $city,

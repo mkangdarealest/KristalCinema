@@ -21,24 +21,36 @@ class Movie {
     required this.status,
   });
 
-  /// Chuyển từ Firestore Document sang Movie object
-  factory Movie.fromFirestore(Map<String, dynamic> json, String docId) {
+  /// Chuyển từ JSON API sang Movie object
+  factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(
-      id: docId,
-      title: json["title"] ?? "",
-      image: json["image"] ?? json["posterUrl"] ?? "",
-      isHot: json["isHot"] ?? false,
-      genre: json["genre"] is List ? (json["genre"] as List).join(", ") : (json["genre"] ?? ""),
-      duration: json["duration"] is num ? "${json["duration"]} phút" : (json["duration"] ?? ""),
-      rating: json["rating"] ?? "",
-      synopsis: json["synopsis"] ?? "",
-      status: json["status"] ?? "now_showing",
+      id: (json["id"] ?? json["movieId"] ?? json["MOVIE_ID"] ?? "").toString(),
+      title: json["title"] ?? json["TITLE"] ?? "",
+      image: json["image"] ?? json["IMAGE"] ?? json["posterUrl"] ?? "",
+      isHot: json["isHot"] == true || json["isHot"] == 1 || json["IS_HOT"] == 1,
+      genre: json["genre"] is List
+          ? (json["genre"] as List).join(", ")
+          : (json["genre"] ?? json["GENRE"] ?? ""),
+      duration: json["duration"] is num
+          ? "${json["duration"]} phút"
+          : (json["duration"] ?? json["DURATION"] ?? ""),
+      rating: json["rating"] ?? json["RATING"] ?? "",
+      synopsis: json["synopsis"] ?? json["SYNOPSIS"] ?? "",
+      status: json["status"] ?? json["STATUS"] ?? "now_showing",
     );
   }
 
-  /// Chuyển Movie sang Map để lưu trên Firestore
-  Map<String, dynamic> toFirestore() {
+  /// Tương thích fromFirestore cũ
+  factory Movie.fromFirestore(Map<String, dynamic> json, String docId) {
+    final m = Map<String, dynamic>.from(json);
+    m["id"] = docId;
+    return Movie.fromJson(m);
+  }
+
+  /// Chuyển Movie sang Map để gửi qua REST API
+  Map<String, dynamic> toJson() {
     return {
+      "id": id,
       "title": title,
       "image": image,
       "isHot": isHot,
@@ -49,6 +61,9 @@ class Movie {
       "status": status,
     };
   }
+
+  /// Tương thích toFirestore cũ
+  Map<String, dynamic> toFirestore() => toJson();
 
   static final List<Movie> mockMovies = [
     // Hot movies
@@ -148,9 +163,9 @@ class Movie {
       image: "assets/images/poster8.jpg",
       isHot: false,
       genre: "Lịch sử, Chiến tranh, Chính kịch",
-      duration: "95 phút",
-      rating: "P",
-      synopsis: "Bộ phim không có một cốt truyện đơn tuyến cụ thể mà xoay quanh cuộc sống chật vật, ngột ngạt của 21 chiến sĩ du kích do chỉ huy Bảy Theo (Thái Hòa đóng) dẫn dắt.",
+      duration: "130 phút",
+      rating: "T18",
+      synopsis: "Phim điện ảnh Địa Đạo tái hiện cuộc chiến tranh nhân dân kiên cường tại vùng đất thép Củ Chi, tôn vinh ý chí bất khuất của các chiến sĩ và đồng bào trong những năm tháng kháng chiến.",
       status: "coming_soon",
     ),
   ];

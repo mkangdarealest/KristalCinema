@@ -204,7 +204,7 @@ class _AddEditMoviePageState extends State<AddEditMoviePage> {
                       title: const Text("Phim nổi bật (Slider Banner)", style: TextStyle(color: Colors.white)),
                       subtitle: const Text("Hiển thị lớn trên đầu trang chủ", style: TextStyle(color: Colors.grey, fontSize: 12)),
                       value: isHot,
-                      activeColor: const Color(0xFF39FF14),
+                      activeThumbColor: const Color(0xFF39FF14),
                       activeTrackColor: const Color(0xFF1A5A1A),
                       onChanged: (val) => setState(() => isHot = val),
                     ),
@@ -290,7 +290,7 @@ class _AddEditMoviePageState extends State<AddEditMoviePage> {
     required void Function(T?) onChanged,
   }) {
     return DropdownButtonFormField<T>(
-      value: value,
+      initialValue: value,
       dropdownColor: const Color(0xFF1A1A1A),
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(

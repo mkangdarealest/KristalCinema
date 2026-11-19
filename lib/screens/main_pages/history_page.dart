@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../../services/auth_service.dart';
 import '../../services/preference_service.dart';
 import '../../services/firestore_service.dart';
@@ -27,9 +26,9 @@ class _HistoryPageState extends State<HistoryPage> {
 
   Future<void> loadAllHistories() async {
     loginHistory = await AuthService.getHistory();
-    final user = FirebaseAuth.instance.currentUser;
+    final user = await AuthService.currentUser();
     if (user != null) {
-      bookingHistory = await FirestoreService.getUserBookings(user.uid);
+      bookingHistory = await FirestoreService.getUserBookings(user.id ?? user.email);
     } else {
       bookingHistory = [];
     }

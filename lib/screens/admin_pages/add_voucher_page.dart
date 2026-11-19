@@ -165,7 +165,7 @@ class _AddVoucherPageState extends State<AddVoucherPage> {
                       title: const Text("Trạng thái kích hoạt", style: TextStyle(color: Colors.white)),
                       subtitle: const Text("Cho phép người dùng áp dụng mã này khi thanh toán", style: TextStyle(color: Colors.grey, fontSize: 12)),
                       value: isActive,
-                      activeColor: const Color(0xFF39FF14),
+                      activeThumbColor: const Color(0xFF39FF14),
                       activeTrackColor: const Color(0xFF1A5A1A),
                       onChanged: (val) => setState(() => isActive = val),
                     ),

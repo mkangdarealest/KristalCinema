@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/movie_model.dart';
 import '../../models/cinema_model.dart';
+import '../../services/auth_service.dart';
 import '../../services/firestore_service.dart';
 import 'main_page.dart';
 
@@ -327,7 +326,7 @@ class _BookingPageState extends State<BookingPage> {
       builder: (context, snapshot) {
         List<String> currentBookedSeats = [];
         if (snapshot.hasData && snapshot.data!.exists) {
-          final data = snapshot.data!.data() as Map<String, dynamic>?;
+          final data = snapshot.data!.data();
           if (data != null && data['bookedSeats'] != null) {
             currentBookedSeats = List<String>.from(data['bookedSeats']);
           }
@@ -370,7 +369,7 @@ class _BookingPageState extends State<BookingPage> {
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF39FF14).withOpacity(0.5),
+                        color: const Color(0xFF39FF14).withValues(alpha: 0.5),
                         blurRadius: 10,
                         spreadRadius: 2,
                       ),
@@ -781,7 +780,7 @@ class _BookingPageState extends State<BookingPage> {
   // BOOKING CONFIRMATION & DIALOG
   //-----------------------------------------
   Future<void> _confirmBooking() async {
-    final user = FirebaseAuth.instance.currentUser;
+    final user = await AuthService.currentUser();
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -807,7 +806,7 @@ class _BookingPageState extends State<BookingPage> {
 
     try {
       bool success = await FirestoreService.bookSeats(
-        userId: user.uid,
+        userId: user.id ?? user.email,
         movieTitle: widget.movie.title,
         moviePoster: widget.movie.image,
         cinemaName: selectedCinema!.name,
